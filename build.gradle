@@ -1,0 +1,39 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+version = '1.0.0'
+
+dependencies {
+    compile 'io.trino:trino-parser:351'
+    compile "com.fasterxml.jackson.core:jackson-databind:2.11.1"
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+shadowJar {
+    manifest {
+        attributes 'Implementation-Title': project.name,
+                   'Implementation-Version': project.version,
+                   'Specification-Title': project.name,
+                   'Specification-Version': project.version,
+                   'Main-Class': 'Main'
+    }
+    mergeServiceFiles {
+    }
+}
